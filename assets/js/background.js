@@ -41,7 +41,6 @@ chrome.runtime.onInstalled.addListener(() => {
  */
 chrome.alarms.onAlarm.addListener((alarm) => {
     let audioSrcPath;
-
     if (alarm.name === 'lunch') {
         let audioSrcPath = './mp3/speech_lunch_break_time.mp3';
         playAudio(audioSrcPath);
