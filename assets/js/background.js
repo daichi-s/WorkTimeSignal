@@ -16,19 +16,16 @@ const resetTime = new Date(year + "-" + toDay + " 23:59:59");
  * 定期実行を設定
  */
 chrome.runtime.onInstalled.addListener(() => {
-    // 現在時刻
-    const nowTime = new Date();
-
     // 設定時刻を過ぎていた場合、時報をセットしない
-    if (lunchTime > nowTime) {
+    if (lunchTime > date) {
         // お昼休憩の時報を設定
         chrome.alarms.create('lunch', { when: lunchTime.getTime() });
     }
-    if (regularTime > nowTime) {
+    if (regularTime > date) {
         // 定時時刻に時報を設定
         chrome.alarms.create('regular', { when: regularTime.getTime() });
     }
-    if (resetTime > nowTime) {
+    if (resetTime > date) {
         // 翌日の時報をセット
         chrome.alarms.create('resetAlarms', { when: resetTime.getTime() });
     }
@@ -40,7 +37,6 @@ chrome.runtime.onInstalled.addListener(() => {
  * @param {object} alarm
  */
 chrome.alarms.onAlarm.addListener((alarm) => {
-    let audioSrcPath;
     if (alarm.name === 'lunch') {
         let audioSrcPath = './mp3/speech_lunch_break_time.mp3';
         playAudio(audioSrcPath);
@@ -52,7 +48,9 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 
     // 再読み込み
     if (alarm.name === 'resetAlarms') {
-        chrome.runtime.reload()
+        setTimeout(() => (
+            chrome.runtime.reload()
+        ), 5000);
     }
 });
 
